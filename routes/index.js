@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // Import handlers
+const siteConfiguration = require('../handlers/auth/guest/siteConfiguration');
 const register = require('../handlers/auth/guest/register');
 const loginByPassword = require('../handlers/auth/guest/loginByPassword');
 const loginByToken = require('../handlers/auth/guest/loginByToken');
@@ -91,12 +92,18 @@ const getActiveLayout = require('../handlers/game/igloo/getActiveLayout');
 const populationByZoneIds = require('../handlers/game/igloo/populationByZoneIds');
 const popular = require('../handlers/game/igloo/popular');
 
+// Index Route
+router.get('/', (req, res) => {
+  res.send('<h1>OpenCPI Web API</h1>');
+});
+
 // Auth - Guest APIs
+router.get('/jgc/v5/client/:clientId/configuration/site', siteConfiguration);
 router.post('/jgc/v5/client/guest/register', register);
-router.post('/jgc/v5/client/guest/login', loginByPassword);
+router.post('/jgc/v5/client/:clientId/guest/login', loginByPassword);
 router.post('/jgc/v5/client/guest/refresh-auth/:token', refreshAuth);
 router.post('/jgc/v5/client/guest/validate', validate);
-router.post('/jgc/v5/client/guest/api-key', apiKey);
+router.post('/jgc/v5/client/:clientId/api-key', apiKey);
 
 // Auth - Mix APIs
 router.post('/mix/state', mixState);
